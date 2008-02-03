@@ -1,6 +1,6 @@
 == Introduction ==
 
-We are using the Wiky Javascript converter written by [http://goessner.net/articles/wiky/ Stefan Goessner]. Here is a summary of how the converter transform Wiki code into HTML.
+We are using the Wiky Javascript converter written by [http://goessner.net/articles/wiky/ Stefan Goessner]. Here is a summary of how the converter transforms Wiki code into HTML.
 
 == Formatting ==
 
