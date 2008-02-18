@@ -41,3 +41,7 @@
 .wpng-widget-date-title {
 	margin-top: 6px;
 }
+
+br {
+	clear: both;
+}

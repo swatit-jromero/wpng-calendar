@@ -84,7 +84,7 @@ function setupCalendarService() {
 /**
  * Wrapper to query the calendar for dates from current through a number of weeks
  */  
-function loadCalendarByWeeks(weeks) {
+function loadCalendarByWeeks() {
   /* default to current date */
   var start = Date.today();
   var end   = Date.today().add(weeks).weeks();
@@ -135,14 +135,14 @@ function loadCalendar(start, end) {
  *
  * @param {size}  # of events to list (JavaScript)
  */  
-function loadCalendarWidget(size) {
+function loadCalendarWidget() {
   var service = setupCalendarService();
   var query = new google.gdata.calendar.CalendarEventQuery(calendarURL);
   /* general query settings */
   query.setOrderBy('starttime');
   query.setSortOrder('ascending');
   query.setSingleEvents(true);
-  query.setMaxResults(size);
+  query.setMaxResults(widgetListSize);
   /* convert JS dates to Google GData DateTime */
   var startDateTime = new google.gdata.DateTime(Date.today());
   var endDateTime = new google.gdata.DateTime(Date.today().add(6).months());
@@ -173,6 +173,8 @@ function listEvents(feedRoot) {
   var len = entries.length;
   /* the list is displayed in a table, let's create it */
   var table = document.createElement('table');
+  var tableBody = document.createElement('tbody');
+  table.setAttribute('className','wpng-page-list-table');
   table.setAttribute('class','wpng-page-list-table');
   for (var i = 0; i < len; i++) {
 	  var entry = entries[i];
@@ -194,11 +196,13 @@ function listEvents(feedRoot) {
 	  if (dateString != prevDateString) {
 		  var trHead = document.createElement('tr');
 		  var tdHead = document.createElement('td');
+		  tdHead.setAttribute('className','wpng-page-list-head');
 		  tdHead.setAttribute('class','wpng-page-list-head');
+		  tdHead.setAttribute('colSpan','2');
 		  tdHead.setAttribute('colspan','2');
 		  tdHead.appendChild(document.createTextNode(dateString));
 		  trHead.appendChild(tdHead);
-		  table.appendChild(trHead);
+		  tableBody.appendChild(trHead);
 		  prevDateString = dateString;
 	  }
 	  /* now display the event itself */
@@ -218,13 +222,15 @@ function listEvents(feedRoot) {
 	  var trEntry = document.createElement('tr');
 	  var tdEntryTime = document.createElement('td');	  
 	  var tdEntryTitle = document.createElement('td');	  
+	  tdEntryTime.setAttribute('className','wpng-page-list-time');
 	  tdEntryTime.setAttribute('class','wpng-page-list-time');
+	  tdEntryTitle.setAttribute('className','wpng-page-list-title');
 	  tdEntryTitle.setAttribute('class','wpng-page-list-title');
 	  tdEntryTime.appendChild(document.createTextNode(timeString));
 	  tdEntryTitle.appendChild(anchorTitle);
 	  trEntry.appendChild(tdEntryTime);
 	  trEntry.appendChild(tdEntryTitle);
-	  table.appendChild(trEntry);
+	  tableBody.appendChild(trEntry);
 	  /* get the date from the first / last entry */
 	  if (i == 0) {
 		  firstDate = displayTime;
@@ -233,6 +239,8 @@ function listEvents(feedRoot) {
 	          lastDate = displayTime;
 	  }
   }
+  /* Append the table body to the table */
+  table.appendChild(tableBody);
   
   /* if there were some events, add the table */
   if (len != 0) {
@@ -247,6 +255,8 @@ function listEvents(feedRoot) {
   /* at the end of the list, show the navigation links */
   eventDiv.appendChild(document.createElement('br'));
   var navTable = document.createElement('table');
+  var navTableBody = document.createElement('tbody');
+  navTable.setAttribute('className','wpng-page-list-table');
   navTable.setAttribute('class','wpng-page-list-table');
   var row = document.createElement('tr');
   
@@ -265,7 +275,8 @@ function listEvents(feedRoot) {
   tdLater.appendChild(anchorLater);
   row.appendChild(tdLater);
   
-  navTable.appendChild(row);
+  navTableBody.appendChild(row);
+  navTable.appendChild(navTableBody);
   eventDiv.appendChild(navTable);
   
 }
@@ -313,21 +324,26 @@ function listEntry(retrievedEntryRoot) {
 	  }
   }
   var dateRow = document.createElement('div');
+  dateRow.setAttribute('className','wpng-entry-label-row');
   dateRow.setAttribute('class','wpng-entry-label-row');
   
   dateLabel = document.createElement('div');
   dateLabel.appendChild(document.createTextNode('When: '));
+  dateLabel.setAttribute('className','wpng-entry-label');
   dateLabel.setAttribute('class','wpng-entry-label');
   dateRow.appendChild(dateLabel);
   
   dateDisplay = document.createElement('div');
   dateDisplay.appendChild(document.createTextNode(dateString));
+  dateDisplay.setAttribute('className','wpng-entry-label-text');
   dateDisplay.setAttribute('class','wpng-entry-label-text');
   dateRow.appendChild(dateDisplay);
   
   entryDiv.appendChild(dateRow);
   
   entryDiv.appendChild(document.createElement('br'));
+  entryDiv.setAttribute('className','wpng-entry-break');
+  entryDiv.setAttribute('class','wpng-entry-break');
   
   /* display the location */
   var locString = 'No location information';
@@ -337,15 +353,18 @@ function listEntry(retrievedEntryRoot) {
 	  locString = locTemp
   }
   var locRow = document.createElement('div');
+  locRow.setAttribute('className','wpng-entry-label-row');
   locRow.setAttribute('class','wpng-entry-label-row');
   
   locLabel = document.createElement('div');
   locLabel.appendChild(document.createTextNode('Where: '));
+  locLabel.setAttribute('className','wpng-entry-label');
   locLabel.setAttribute('class','wpng-entry-label');
   locRow.appendChild(locLabel);
   
   locDisplay = document.createElement('div');
   locDisplay.appendChild(document.createTextNode(locString));
+  locDisplay.setAttribute('className','wpng-entry-label-text');
   locDisplay.setAttribute('class','wpng-entry-label-text');
   locRow.appendChild(locDisplay);
   
@@ -353,11 +372,27 @@ function listEntry(retrievedEntryRoot) {
   
   /* add a link to Google map the location, if something was there */
   if (locTemp != null) {
+	  /* use browser sniffing to determine if IE or Opera (ugly, but required) */
+	  /* thanks to => http://webbugtrack.blogspot.com/2007/10/bug-245-setattribute-style-does-not.html */
+	  var isOpera = false;
+	  var isIE = false;
+	  var agt=navigator.userAgent.toLowerCase();
+	  var appVer = navigator.appVersion.toLowerCase();
+	  var iePos  = appVer.indexOf('msie');
+	  if(typeof(window.opera) != 'undefined'){isOpera = true;}
+	  if(!isOpera && iePos !=-1){isIE = true;};
+	  
 	  var locMapAnchor = document.createElement('a');
 	  locMapAnchor.setAttribute('id','wpng-map-link');
 	  locMapAnchor.setAttribute('href','http://maps.google.com/maps?hl=en&q=' + locString);
 	  locMapAnchor.setAttribute('target','_blank');
-	  locMapAnchor.setAttribute('style','float:right;');
+	  if(!isIE){
+		  /* use the correct DOM Method */
+		  locMapAnchor.setAttribute('style','float:right;');
+	  } else {
+		  /* use the .cssText hack */
+		  locMapAnchor.style.setAttribute('cssText', 'float:right;');
+	  }
 	  locMapAnchor.appendChild(document.createTextNode('Map'));
 	  entryDiv.appendChild(locMapAnchor);
   }
@@ -371,6 +406,7 @@ function listEntry(retrievedEntryRoot) {
 	  descString = tempString;
   }
   var descDisplay = document.createElement('div');
+  descDisplay.setAttribute('className','wpng-entry-desc');
   descDisplay.setAttribute('class','wpng-entry-desc');
   // Translate description wikitext into HTML if the option is enabled
   if (parseWiki) {
@@ -438,6 +474,7 @@ function listWidgetEvents(feedRoot) {
 			  eventDiv.appendChild(ulist);
 		  }
 		  var titleDiv = document.createElement('div');
+		  titleDiv.setAttribute('className','wpng-widget-date-title');
 		  titleDiv.setAttribute('class','wpng-widget-date-title');
 		  titleDiv.appendChild(document.createTextNode(dateString));
 		  eventDiv.appendChild(titleDiv);

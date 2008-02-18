@@ -175,7 +175,32 @@ if (!class_exists("WPNGCalendar")) {
 				var calendarURL = '<?php echo($adminOptions[$this->adminCalFeedsOptName]) ?>';
 				var pageMaxResults = <?php echo($adminOptions[$this->adminPageMaxEntriesOptName]) ?>;
 				var parseWiki = <?php echo($adminOptions[$this->adminWikiOptName]) ?>;
+				var weeks = null;
+				var widgetListSize = null;
 		        </script>
+			<?php
+		}
+		
+		// Add onLoad function to work around IE 6 & 7 bugs
+		function addOnLoadScript() {
+			?>
+			<script type="text/javascript">
+			function addLoadEvent(func) {
+				var oldonload = window.onload;
+				if (typeof window.onload != 'function') {
+					window.onload = func;
+				} else {
+					window.onload = function() {
+					if (oldonload) {
+						oldonload();
+					}
+						func();
+					}
+				}
+			}
+			
+			//addLoadEvent(loadCalTest);
+			</script>
 			<?php
 		}
 		
@@ -206,10 +231,12 @@ if (!class_exists("WPNGCalendar")) {
 			}
 			?>
 			<div id="wpng-cal-events"></div>
+			<div>
 			<script type="text/javascript">
-			  	var weeks = <?php echo($weeks) ?>;
-				loadCalendarByWeeks(weeks);
+			  	weeks = <?php echo($weeks) ?>;
+				addLoadEvent(loadCalendarByWeeks);
 			</script>
+			</div>
 			<?php
 		}
 		
@@ -230,10 +257,12 @@ if (!class_exists("WPNGCalendar")) {
 				?>
 				<h2 class="widgettitle"><?php echo($options['wpng_cal_widget_title']) ?></h2>
 				<div id="wpng-cal-widget-events"></div>
-				<script type="text/javascript">
-					var listSize = <?php echo($options['wpng_cal_widget_list_size']) ?>;
-					loadCalendarWidget(listSize);
+				<div>
+				<script type="text/javascript" defer>
+					widgetListSize = <?php echo($options['wpng_cal_widget_list_size']) ?>;
+					addLoadEvent(loadCalendarWidget);
 				</script>
+				</div>
 				<?php
 				echo $after_widget;
 			}
@@ -293,6 +322,7 @@ if (isset($dl_pluginWPNGCal)) {
 	add_action('wp_head', array(&$dl_pluginWPNGCal, 'addJSAPIHeader'), 1);
 	add_action('wp_head', array(&$dl_pluginWPNGCal, 'addWPNGSettings'), 1);
 	add_action('wp_head', array(&$dl_pluginWPNGCal, 'addWPNGHeader'), 1);
+	add_action('wp_head', array(&$dl_pluginWPNGCal, 'addOnLoadScript'), 1);
 	// Add the widget
 	add_action('plugins_loaded', array(&$dl_pluginWPNGCal, 'widgetWPNGCalendarInit'), 1);
 	
