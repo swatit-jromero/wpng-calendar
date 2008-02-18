@@ -1,5 +1,6 @@
 #labels Featured
-= Change Log =
+=ChangeLog =
 
 *2008-02-17 [l1jockeys]*
-# fixed IE compatibilities. 
+
+ # fixed IE compatibilities noted in [http://code.google.com/p/wpng-calendar/issues/detail?id=1&can=1 Issue 1]
