@@ -1,8 +1,8 @@
 #labels Featured
-*2008-02-18 [l1jockeys]*
+*2008-02-18   [l1jockeys]   Version 0.7.2*
 
  # updated with latest version of DateJS to possibly address [http://code.google.com/p/wpng-calendar/issues/detail?id=4&can=1 Issue 4]
 
-*2008-02-17 [l1jockeys]*
+*2008-02-17   [l1jockeys]   Version 0.7.1*
 
  # fixed IE compatibilities noted in [http://code.google.com/p/wpng-calendar/issues/detail?id=1&can=1 Issue 1]
