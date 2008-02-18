@@ -1,0 +1,5 @@
+#labels Featured
+= Change Log =
+
+*2008-02-17 [l1jockeys]*
+# fixed IE compatibilities. 
