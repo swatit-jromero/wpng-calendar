@@ -3,7 +3,7 @@
 Plugin Name: Wordpress Google Calendar
 Plugin URI: http://code.google.com/p/wpng-calendar/
 Description: This plugin allows for the integration of a Google calendar into a Wordpress blog.
-Version: 0.7
+Version: 0.7.1
 Author: L1 Jockeys
 Author URI: http://code.google.com/p/wpng-calendar/
 
