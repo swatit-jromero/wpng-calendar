@@ -3,7 +3,7 @@
 Plugin Name: Wordpress Google Calendar
 Plugin URI: http://code.google.com/p/wpng-calendar/
 Description: This plugin allows for the integration of a Google calendar into a Wordpress blog.
-Version: 0.7.2
+Version: 0.8
 Author: L1 Jockeys
 Author URI: http://code.google.com/p/wpng-calendar/
 
@@ -46,6 +46,7 @@ if (!class_exists("WPNGCalendar")) {
 		var $adminCalFeedsOptName       = "wpng_cal_feeds";
 		var $adminPageMaxEntriesOptName = "wpng_cal_page_max_entries";
 		var $adminWikiOptName           = "wpng_cal_show_wiki";
+		var $adminShowNavName		= "wpng_cal_show_nav";
 		
 		var $widgetOptionsName		= "wpng_cal_widget_options";
 		var $widgetListSizeOptName	= "wpng_cal_widget_list_size";
@@ -73,10 +74,12 @@ if (!class_exists("WPNGCalendar")) {
 			$adminCalFeedsOpt       = "http://www.google.com/calendar/feeds/pdighgf028nmbjbrno8oed8vsg%40group.calendar.google.com/public/full";
 			$adminPageMaxEntriesOpt = 15;
 			$adminWikiOpt           = false;
+			$adminShowNav		= true;
 			$adminOptions = array($this->adminKeyOptName => $adminKeyOpt,
 				              $this->adminCalFeedsOptName => $adminCalFeedsOpt,
 					      $this->adminPageMaxEntriesOptName => $adminPageMaxEntriesOpt,
-					      $this->adminWikiOptName => $adminWikiOpt);
+					      $this->adminWikiOptName => $adminWikiOpt,
+					      $this->adminShowNavName => $adminShowNav);
 			
 			// Get values from the WP options table in the database, re-assign if found
 			$dbOptions = get_option($this->adminOptionsName);
@@ -108,6 +111,9 @@ if (!class_exists("WPNGCalendar")) {
 				if (isset($_POST['wpngShowWiki'])) {
 					$adminOptions[$this->adminWikiOptName] = $_POST['wpngShowWiki'];
 				}
+				if (isset($_POST['wpngShowNav'])) {
+					$adminOptions[$this->adminShowNavName] = $_POST['wpngShowNav'];
+				}
 				update_option($this->adminOptionsName, $adminOptions);
 				// update settings notification below
 				?>
@@ -128,6 +134,8 @@ if (!class_exists("WPNGCalendar")) {
 					<p><input name="wpngPageMax" style="width: 5%;" value="<?php _e(apply_filters('format_to_edit',$adminOptions[$this->adminPageMaxEntriesOptName]), 'WPNGCalendar') ?>" /></p>
 					<h3>Process Calendar Description As Wiki Markup</h3>
 					<p><label for="wpngShowWiki_yes"><input type="radio" id="wpngShowWiki_yes" name="wpngShowWiki" value="true" <?php if ($adminOptions[$this->adminWikiOptName] == "true") { _e('checked="checked"', 'WPNGCalendar'); }?> /> Yes</label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="wpngShowWiki_no"><input type="radio" id="wpngShowWiki_no" name="wpngShowWiki" value="false" <?php if ($adminOptions[$this->adminWikiOptName] == "false") { _e('checked="checked"', "WPNGCalendar"); }?>/> No</label></p>
+					<h3>Show Navigation Links On The Page</h3>
+					<p><label for="wpngShowNav_yes"><input type="radio" id="wpngShowNav_yes" name="wpngShowNav" value="true" <?php if ($adminOptions[$this->adminShowNavName] == "true") { _e('checked="checked"', 'WPNGCalendar'); }?> /> Yes</label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="wpngShowNav_no"><input type="radio" id="wpngShowNav_no" name="wpngShowNav" value="false" <?php if ($adminOptions[$this->adminShowNavName] == "false") { _e('checked="checked"', "WPNGCalendar"); }?>/> No</label></p>
 					
 					<div class="submit">
 						<input type="submit" name="update_wpngCalendarSettings" value="<?php _e('Update Settings', 'WPNGCalendar') ?>" />
@@ -175,6 +183,7 @@ if (!class_exists("WPNGCalendar")) {
 				var calendarURL = '<?php echo($adminOptions[$this->adminCalFeedsOptName]) ?>';
 				var pageMaxResults = <?php echo($adminOptions[$this->adminPageMaxEntriesOptName]) ?>;
 				var parseWiki = <?php echo($adminOptions[$this->adminWikiOptName]) ?>;
+				var showNav = <?php echo($adminOptions[$this->adminShowNavName]) ?>;
 				var weeks = null;
 				var widgetListSize = null;
 		        </script>
