@@ -31,7 +31,7 @@ THE SOFTWARE.
 google.load("gdata", "1");
 
 /* Loads the Google map API */
-google.load("maps", "2");
+//google.load("maps", "2");
 
 /* Set global variables to store the dates being processed */
 var firstDate = null;
@@ -46,7 +46,7 @@ function init() {
   /* initialize the error handler */
   google.gdata.client.init(handleGDError);
   /* initialize the Geocoder */
-  geocoder = new GClientGeocoder();
+  //geocoder = new GClientGeocoder();
 }
 
 /**
@@ -253,31 +253,34 @@ function listEvents(feedRoot) {
   }
   	  
   /* at the end of the list, show the navigation links */
-  eventDiv.appendChild(document.createElement('br'));
-  var navTable = document.createElement('table');
-  var navTableBody = document.createElement('tbody');
-  navTable.setAttribute('className','wpng-page-list-table');
-  navTable.setAttribute('class','wpng-page-list-table');
-  var row = document.createElement('tr');
   
-  var tdOlder = document.createElement('td');
-  var anchorOlder = document.createElement('a');
-  anchorOlder.setAttribute('href','javascript:getOlderEntries()');
-  anchorOlder.appendChild(document.createTextNode('< Show older events'));
-  tdOlder.appendChild(anchorOlder);
-  row.appendChild(tdOlder);
-  
-  var tdLater = document.createElement('td');
-  tdLater.setAttribute('align','right');
-  var anchorLater = document.createElement('a');
-  anchorLater.setAttribute('href','javascript:getLaterEntries()');
-  anchorLater.appendChild(document.createTextNode('Show later events >'));
-  tdLater.appendChild(anchorLater);
-  row.appendChild(tdLater);
-  
-  navTableBody.appendChild(row);
-  navTable.appendChild(navTableBody);
-  eventDiv.appendChild(navTable);
+  if (showNav) {
+	  eventDiv.appendChild(document.createElement('br'));
+	  var navTable = document.createElement('table');
+	  var navTableBody = document.createElement('tbody');
+	  navTable.setAttribute('className','wpng-page-list-table');
+	  navTable.setAttribute('class','wpng-page-list-table');
+	  var row = document.createElement('tr');
+	  
+	  var tdOlder = document.createElement('td');
+	  var anchorOlder = document.createElement('a');
+	  anchorOlder.setAttribute('href','javascript:getOlderEntries()');
+	  anchorOlder.appendChild(document.createTextNode('< Show older events'));
+	  tdOlder.appendChild(anchorOlder);
+	  row.appendChild(tdOlder);
+	  
+	  var tdLater = document.createElement('td');
+	  tdLater.setAttribute('align','right');
+	  var anchorLater = document.createElement('a');
+	  anchorLater.setAttribute('href','javascript:getLaterEntries()');
+	  anchorLater.appendChild(document.createTextNode('Show later events >'));
+	  tdLater.appendChild(anchorLater);
+	  row.appendChild(tdLater);
+	  
+	  navTableBody.appendChild(row);
+	  navTable.appendChild(navTableBody);
+	  eventDiv.appendChild(navTable);
+  }
   
 }
 
@@ -514,8 +517,9 @@ function listWidgetEvents(feedRoot) {
  * Show a map using the description information using the Google Map API
  * TODO: Add a AJAX grabbed map to the Facebox using this function
  */
+ 
+/*
 function showEntryMap(address) { 
-  /* get the map from Google */
   entryMap = new google.maps.Map2(document.getElementById("wpng-entry-map"));
   geocoder.getLatLng(
     address,
@@ -532,6 +536,7 @@ function showEntryMap(address) {
   );
   var test = jQuery('#wpng-entry-map').slideDown();
 }
+*/
 
 /**
  * Callback function for the Google data JS client library to call when an error
