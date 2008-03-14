@@ -3,7 +3,7 @@
 Plugin Name: Wordpress Google Calendar
 Plugin URI: http://code.google.com/p/wpng-calendar/
 Description: This plugin allows for the integration of a Google calendar into a Wordpress blog.
-Version: 0.8
+Version: 0.8.5
 Author: L1 Jockeys
 Author URI: http://code.google.com/p/wpng-calendar/
 
@@ -161,15 +161,15 @@ if (!class_exists("WPNGCalendar")) {
 		function addWPNGHeader() {
 			// Add the DateJS file			
 			wp_enqueue_script('date-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/date.js', null, 'alpha-1');
-			// Add the Facebox files (include newer version of jQuery which is required by Facebox)
-			wp_enqueue_script('jquery121-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/jquery-1.2.1.min.js', null, '1.2.1');
-			echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/facebox/facebox.css" />';
-			wp_enqueue_script('facebox-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/facebox/facebox.js', null, '1.0');
+			// Add the ThickBox files
+			wp_enqueue_script('jquery-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/jquery.js', null, '6124');
+			wp_enqueue_script('thickbox-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/thickbox.js', null, '3.1');
+			echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/css/thickbox.css" />';
 			// Add the Wiky converter file
 			wp_enqueue_script('wiky-js', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/wiky.js', null, '1.0');
 			
 			// Add the plugin's JS file
-			wp_enqueue_script('wpng-calendar', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/functions.js', array('date-js'), '0.7');
+			wp_enqueue_script('wpng-calendar', get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/js/functions.js', array('date-js'), '0.85');
 			
 			// Add the plugin's CSS file
 			echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wpng-calendar/css/style.css" />';
@@ -239,7 +239,10 @@ if (!class_exists("WPNGCalendar")) {
 				$weeks = 4;
 			}
 			?>
-			<div id="wpng-cal-events"></div>
+			<div id="wpng-cal-events" style="display:none;"></div>
+			<div id="wpng-cal-load-page" class="wpng-cal-loading">
+				<img class="wpng-cal-image" src='/wp-content/plugins/wpng-calendar/images/loading_large.gif'/>
+			</div>
 			<div>
 			<script type="text/javascript">
 			  	weeks = <?php echo($weeks) ?>;
@@ -265,7 +268,10 @@ if (!class_exists("WPNGCalendar")) {
 				}
 				?>
 				<h2 class="widgettitle"><?php echo($options['wpng_cal_widget_title']) ?></h2>
-				<div id="wpng-cal-widget-events"></div>
+				<div id="wpng-cal-widget-events" style="display:none;"></div>
+				<div id="wpng-cal-load-widget" class="wpng-cal-loading">
+					<img class="wpng-cal-image" src='/wp-content/plugins/wpng-calendar/images/loading_large.gif'/>
+				</div>
 				<div>
 				<script type="text/javascript" defer>
 					widgetListSize = <?php echo($options['wpng_cal_widget_list_size']) ?>;
