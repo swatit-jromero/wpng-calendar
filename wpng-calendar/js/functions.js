@@ -27,6 +27,8 @@ THE SOFTWARE.
 ----------------------------------------------------------------------------
 */
 
+$j=jQuery.noConflict();
+
 /* Loads the Google data API */
 google.load("gdata", "1");
 
@@ -211,7 +213,7 @@ function listEvents(feedRoot) {
 	  if (!startTime.isDateOnly()) {
 		  timeString = startTime.getDate().toString("h:mm tt")
 	  }
-	  /* create an anchor to the Facebox remote call for the title */
+	  /* create an anchor to the ThickBox remote call for the title */
 	  var title = entry.getTitle().getText();
 	  var uri = entry.getSelfLink().getHref();
 	  var anchorTitle = document.createElement('a');
@@ -253,7 +255,6 @@ function listEvents(feedRoot) {
   }
   	  
   /* at the end of the list, show the navigation links */
-  
   if (showNav) {
 	  eventDiv.appendChild(document.createElement('br'));
 	  var navTable = document.createElement('table');
@@ -282,6 +283,11 @@ function listEvents(feedRoot) {
 	  eventDiv.appendChild(navTable);
   }
   
+  /* Hide the loading image */
+  $j("#wpng-cal-load-page").fadeOut("fast");
+  
+  /* Animate the display of the list */
+  $j("#wpng-cal-events").slideDown("slow");
 }
 
 /**
@@ -297,8 +303,9 @@ function listEntry(retrievedEntryRoot) {
   /* get the entry */
   var entry = retrievedEntryRoot.entry;
   
-  /* build the entry display for the facebox */
+  /* build the entry display for the Thickbox */
   var entryDiv = document.createElement('div');
+  entryDiv.setAttribute('id','wpng-tb');
   
   /* get the title */
   var title = document.createElement('h2');
@@ -430,8 +437,8 @@ function listEntry(retrievedEntryRoot) {
   entryDiv.appendChild(mapDiv);
   */
   
-  /* add the div to the Facebox */
-  jQuery.facebox(entryDiv.innerHTML);
+  /* add the div to my modified ThickBox function */
+  tb_show_inner("",entryDiv.innerHTML,"height=500&width=500");
 }
 
 /**
@@ -491,6 +498,8 @@ function listWidgetEvents(feedRoot) {
 	  var title = entry.getTitle().getText();
 	  var uri = entry.getSelfLink().getHref();
 	  var anchorTitle = document.createElement('a');
+	  anchorTitle.setAttribute('className','thickbox');
+	  anchorTitle.setAttribute('class','thickbox');
 	  anchorTitle.setAttribute('href','javascript:loadCalendarEntry("' + uri + '")');
 	  anchorTitle.appendChild(document.createTextNode(title));
 	  
@@ -510,6 +519,12 @@ function listWidgetEvents(feedRoot) {
 	  /* show a default message */
 	  eventDiv.appendChild(document.createTextNode('No events to show.'));
   }
+  
+  /* Hide the loading image */
+  $j("#wpng-cal-load-widget").fadeOut("fast");
+  
+  /* Animate the display of the list */
+  $j("#wpng-cal-widget-events").slideDown("slow");
   
 }
 
