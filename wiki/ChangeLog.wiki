@@ -1,7 +1,7 @@
 #labels Featured
 *2008-03-14   [l1jockeys]   Version 0.8.5*
 
- # Change modal to ThickBox (modified to fit our needs) as we were having issues in not moving to JQuery 1.2.3 for our own Wordpress site
+ # Change modal to ThickBox (modified to fit our needs) as we were having issues in moving to JQuery 1.2.3 for our own Wordpress site
  # Also added new animation to the calendar and entry display
 
 *2008-03-09   [l1jockeys]   Version 0.8*
