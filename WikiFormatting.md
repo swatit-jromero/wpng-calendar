@@ -1,0 +1,80 @@
+## Introduction ##
+
+We are using the Wiky Javascript converter written by [Stefan Goessner](http://goessner.net/articles/wiky/). Here is a summary of how the converter transforms Wiki code into HTML.
+
+## Formatting ##
+
+### Headings ###
+
+| `= H1 =` | `<h1> H1 </h1>` |
+|:---------|:----------------|
+| `== H2 ==` | `<h2> H2 </h2>` |
+| `====== H6 ======` | `<h6> H6 </h6>` |
+
+
+### Inline ###
+
+| `["quotation"]` | `<blockquote><p>quote</p></blockquote>`|
+|:----------------|:---------------------------------------|
+| `[%code block%]` | `<pre>code block</pre>`                |
+| `*strong*`      | `<strong>strong</strong>`              |
+| `_emphasized_`  | `<em>emphasized</em>`                  |
+| `^superscript^` | `<sup>superscript</sup>`               |
+| `~subscript~`   | `<sub>subscript</sub>`                 |
+| `%code%`        | `<code>code</code>`                    |
+| `?ABBR(abbreviation)?` | `<abbr title="abbreviation">ABBR</abbr>` |
+| `; term: definition` |	`<dl><dt>term</dt><dd>definition</dd></dl>` |
+
+
+### Links & Images ###
+
+| `http://u.ri` | `<a href="http://u.ri">http://u.ri</a>` |
+|:--------------|:----------------------------------------|
+| `[http://u.ri, title]` | `<a href="http://u.ri">title</a>`       |
+| `uri/image.png` | `<img src="uri/image.png" alt="uri/image.png"/>` |
+| `[img:uri/image.png,title]` | `<a href="http://u.ri">title</a>`       |
+| `[http://u.ri, title]` | `<img src="uri/image.png" alt="title" title="title"/>` |
+
+
+### Lists ###
+
+` * unordered`
+
+` * list`
+
+
+`<ul>`
+
+` <li class="u">unordered</li>`
+
+` <li class="u">list</li>`
+
+`</ul>`
+
+
+
+` 1. ordered`
+
+` 1. list`
+
+
+`<ol style="list-style-type:decimal;">`
+
+` <li class="1">ordered</li>`
+
+` <li class="1">list</li>`
+
+`</ol>`
+
+
+### Table ###
+
+`[|one|two|`
+
+`||three|four|]`
+
+
+
+`<table><tr><td>one</td><td>two</td></tr>`
+
+`<tr><td>three</td><td>four</td></tr></table>`
